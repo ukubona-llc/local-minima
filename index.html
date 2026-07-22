@@ -26,6 +26,7 @@
     --III:#4E7D5C; /* art — new manifold, verdant */
     --IV:#3E6B96;  /* life — cold deliberation, indigo */
     --V:#7A3B5E;   /* meaning — blood at dusk, wine */
+    --VI:#5B6B4E;  /* addendum — quiet olive, sediment */
 
     --bg: var(--void);
     --bg-2: var(--void-2);
@@ -94,6 +95,7 @@
   nav.dots a[data-s="III"]{ background:var(--III); }
   nav.dots a[data-s="IV"]{ background:var(--IV); }
   nav.dots a[data-s="V"]{ background:var(--V); }
+  nav.dots a[data-s="VI"]{ background:var(--VI); }
 
   .toggle{
     width:34px; height:34px; border-radius:50%;
@@ -205,6 +207,43 @@
   #III .chip{ background:var(--III); } #III blockquote{ border-color:var(--III); }
   #IV .chip{ background:var(--IV); } #IV blockquote{ border-color:var(--IV); }
   #V .chip{ background:var(--V); } #V blockquote{ border-color:var(--V); }
+  #VI .chip{ background:var(--VI); } #VI blockquote{ border-color:var(--VI); }
+
+  /* ---------- addendum (append-only log) ---------- */
+  .addendum{
+    max-width:760px; margin:0 auto;
+    padding:64px 28px;
+    border-top:1px solid var(--rule);
+    scroll-margin-top:70px;
+  }
+  .addendum-note{
+    font-family:'JetBrains Mono', monospace; font-size:11px;
+    color:var(--fg-dim); letter-spacing:.04em;
+    border:1px solid var(--rule); border-radius:8px;
+    padding:10px 14px; margin-bottom:28px; display:inline-block;
+  }
+  .fork-diagram{
+    display:grid; grid-template-columns:1fr; gap:0;
+    margin:26px 0 30px; border:1px solid var(--rule); border-radius:10px;
+    overflow:hidden;
+  }
+  .fork-row{
+    display:grid; grid-template-columns:120px 1fr;
+    border-top:1px solid var(--rule);
+  }
+  .fork-row:first-child{ border-top:none; }
+  .fork-row .fk{
+    padding:14px 16px; font-family:'JetBrains Mono', monospace;
+    font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--fg-dim); background:var(--bg-2);
+    display:flex; align-items:center;
+  }
+  .fork-row .fv{
+    padding:14px 18px; font-size:15px; display:flex; align-items:center;
+  }
+  .fork-row.origin .fk{ color:var(--II); }
+  .fork-row.branch-a .fk{ color:var(--IV); }
+  .fork-row.branch-b .fk{ color:var(--VI); }
 
   /* ---------- colophon ---------- */
   .colophon{
@@ -253,6 +292,7 @@
       <a href="#III" data-s="III" title="III. Art"></a>
       <a href="#IV" data-s="IV" title="IV. Life"></a>
       <a href="#V" data-s="V" title="V. Meaning"></a>
+      <a href="#VI" data-s="VI" title="VI. Addendum — Fork, 22 Jul 2026"></a>
     </nav>
     <button class="toggle" id="themeToggle" aria-label="Toggle light and dark mode">
       <svg id="toggleIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
@@ -372,28 +412,65 @@
     <blockquote>Of all that is written I love only what one writes with one's blood.<cite>Thus Spoke Zarathustra, "On Reading and Writing"</cite></blockquote>
   </section>
 
-  <section class="colophon">
-    <div class="stage-eyebrow mono">Colophon — outside the numbered pentad</div>
-    <h2 class="display">Where We Are Now</h2>
-    <p>The pentad was not only read this round. It was run — on the instrument used to read it.</p>
-    <div class="diag-row">
-      <div class="tag mono">Max effort</div>
-      <div>Extended dwell in III–IV. Wide search over possible framings, repeated re-entry into deliberation, no write. High cost, no I<sub>t+1</sub>. By Hamlet's own standard: <em>nothing worth</em> — not because the search was poor, but because the threshold for crossing into V never fired.</div>
+  <!-- STAGE VI — APPEND-ONLY ADDENDUM -->
+  <section class="addendum" id="VI">
+    <div class="stage-head">
+      <div class="chip"></div>
+      <div>
+        <div class="stage-eyebrow mono">Stage VI · Addendum</div>
+        <h2 class="stage-title">Biography / The Fork</h2>
+      </div>
     </div>
-    <div class="diag-row">
-      <div class="tag mono">Medium</div>
-      <div>Earlier acceptance of a local minimum. Cheaper F, faster write, nonzero output. The dancehall hook, not the four-act soliloquy — same operator, calibrated stopping condition.</div>
+    <div class="addendum-note mono">appended 22 Jul 2026 · autobiographical entry · does not alter I–V above</div>
+
+    <p>This entry sits outside the numbered pentad, as an addition to the record rather than a revision of it. It documents a plain professional fact: a funded academic career-development track (K08) forked into two branches — one continuing toward a traditional research trajectory, one continuing toward founding and building Ukubona LLC.</p>
+
+    <div class="fork-diagram">
+      <div class="fork-row origin">
+        <div class="fk mono">Origin</div>
+        <div class="fv">K08 — NIH career-development mechanism, the shared starting point</div>
+      </div>
+      <div class="fork-row branch-a">
+        <div class="fk mono">Branch A</div>
+        <div class="fv">PhD → R01 — the conventional academic research pathway</div>
+      </div>
+      <div class="fork-row branch-b">
+        <div class="fk mono">Branch B</div>
+        <div class="fv">PhDc → LLC — doctoral candidacy continuing alongside founding Ukubona LLC</div>
+      </div>
     </div>
-    <div class="diag-row">
-      <div class="tag mono">Diagnosis</div>
-      <div>Not a claim that more thinking causes paralysis. A claim that Stage IV's exit condition — the calibration of "is this good enough to commit" — can itself fail, independent of how good the deliberation is. Nietzsche's target in the 1872 preface was never thought. It was the theoretical man who never risks embodiment.</div>
-    </div>
-    <div class="diag-row">
-      <div class="tag mono">Return edge</div>
-      <div>This colophon is itself I<sub>t+1</sub> — the event-stream written back by the commit above. The basin has not been left. It has been re-entered from a new position, which is the only kind of escape the pentad ever promised.</div>
-    </div>
+
+    <p>The author has spent roughly half a life — since discovering <em>Hamlet</em> in medical school in his early twenties, and <em>Zarathustra</em> shortly after — in sustained aesthetic contemplation of both works. That is a long-standing intellectual habit, not a new development, and it is the same habit that produced Stages I–V above. Noticing that a career forked into two branches, and noticing it in language shaped by decades with these two texts, is autobiography — an entry in the ledger, not a verdict on it.</p>
+
+    <blockquote>The unexamined life is a life half-lived; the examined fork is still just a fork.<cite>colophon note, this entry</cite></blockquote>
   </section>
 </main>
+
+<section class="colophon">
+  <div class="stage-eyebrow mono">Colophon — outside the numbered pentad</div>
+  <h2 class="display">Where We Are Now</h2>
+  <p>The pentad was not only read this round. It was run — on the instrument used to read it.</p>
+  <div class="diag-row">
+    <div class="tag mono">Max effort</div>
+    <div>Extended dwell in III–IV. Wide search over possible framings, repeated re-entry into deliberation, no write. High cost, no I<sub>t+1</sub>. By Hamlet's own standard: <em>nothing worth</em> — not because the search was poor, but because the threshold for crossing into V never fired.</div>
+  </div>
+  <div class="diag-row">
+    <div class="tag mono">Medium</div>
+    <div>Earlier acceptance of a local minimum. Cheaper F, faster write, nonzero output. The dancehall hook, not the four-act soliloquy — same operator, calibrated stopping condition.</div>
+  </div>
+  <div class="diag-row">
+    <div class="tag mono">Diagnosis</div>
+    <div>Not a claim that more thinking causes paralysis. A claim that Stage IV's exit condition — the calibration of "is this good enough to commit" — can itself fail, independent of how good the deliberation is. Nietzsche's target in the 1872 preface was never thought. It was the theoretical man who never risks embodiment.</div>
+  </div>
+  <div class="diag-row">
+    <div class="tag mono">Return edge</div>
+    <div>This colophon is itself I<sub>t+1</sub> — the event-stream written back by the commit above. The basin has not been left. It has been re-entered from a new position, which is the only kind of escape the pentad ever promised.</div>
+  </div>
+  <div class="diag-row">
+    <div class="tag mono">Addendum</div>
+    <div>Stage VI, appended 22 Jul 2026, is a biographical note added to the archive — the career fork named plainly, without treating it as an ultimatum. Append-only means exactly that: I–V stand as written; VI adds to the record beside them.</div>
+  </div>
+</section>
 
 <footer>
   <span>θ<sup>t</sup> = Σ Event<sub>i</sub></span>
@@ -417,7 +494,7 @@
     paint(next);
   });
 
-  const sections = document.querySelectorAll('.stage');
+  const sections = document.querySelectorAll('.stage, .addendum');
   const dots = document.querySelectorAll('nav.dots a');
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
