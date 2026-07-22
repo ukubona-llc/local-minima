@@ -27,6 +27,7 @@
     --IV:#3E6B96;  /* life — cold deliberation, indigo */
     --V:#7A3B5E;   /* meaning — blood at dusk, wine */
     --VI:#5B6B4E;  /* addendum — quiet olive, sediment */
+    --VII:#4A7A85; /* stress test — external, slate teal */
 
     --bg: var(--void);
     --bg-2: var(--void-2);
@@ -96,6 +97,7 @@
   nav.dots a[data-s="IV"]{ background:var(--IV); }
   nav.dots a[data-s="V"]{ background:var(--V); }
   nav.dots a[data-s="VI"]{ background:var(--VI); }
+  nav.dots a[data-s="VII"]{ background:var(--VII); }
 
   .toggle{
     width:34px; height:34px; border-radius:50%;
@@ -208,6 +210,7 @@
   #IV .chip{ background:var(--IV); } #IV blockquote{ border-color:var(--IV); }
   #V .chip{ background:var(--V); } #V blockquote{ border-color:var(--V); }
   #VI .chip{ background:var(--VI); } #VI blockquote{ border-color:var(--VI); }
+  #VII .chip{ background:var(--VII); } #VII blockquote{ border-color:var(--VII); }
 
   /* ---------- addendum (append-only log) ---------- */
   .addendum{
@@ -244,6 +247,8 @@
   .fork-row.origin .fk{ color:var(--II); }
   .fork-row.branch-a .fk{ color:var(--IV); }
   .fork-row.branch-b .fk{ color:var(--VI); }
+  .fork-row.test-a .fk{ color:var(--VII); }
+  .fork-row.test-b .fk{ color:var(--III); }
 
   /* ---------- colophon ---------- */
   .colophon{
@@ -293,6 +298,7 @@
       <a href="#IV" data-s="IV" title="IV. Life"></a>
       <a href="#V" data-s="V" title="V. Meaning"></a>
       <a href="#VI" data-s="VI" title="VI. Addendum — Fork, 22 Jul 2026"></a>
+      <a href="#VII" data-s="VII" title="VII. Stress Test — III vs. Rodri"></a>
     </nav>
     <button class="toggle" id="themeToggle" aria-label="Toggle light and dark mode">
       <svg id="toggleIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
@@ -444,6 +450,46 @@
 
     <blockquote>The unexamined life is a life half-lived; the examined fork is still just a fork.<cite>colophon note, this entry</cite></blockquote>
   </section>
+
+  <!-- STAGE VII — CROSS-ARTIFACT STRESS TEST (NEW) -->
+  <section class="addendum" id="VII">
+    <div class="stage-head">
+      <div class="chip"></div>
+      <div>
+        <div class="stage-eyebrow mono">Stage VII · Cross-Examination</div>
+        <h2 class="stage-title">Stage III, Stress-Tested Against Rodri</h2>
+      </div>
+    </div>
+    <div class="addendum-note mono">appended 22 Jul 2026 · cross-artifact stress test · tests III against ukubona-llc.github.io/threshold/, does not alter I–VI above</div>
+
+    <p>Stage III names its operator "the router — the creative act that decides the current model is not enough." A second Ukubona artifact, <em>The Threshold</em>, spends four rounds converging on a much more exacting definition of the same word: a threshold-crossing, checkable in real time against 64% possession and three shots. The two artifacts are describing what they both call a threshold. It's worth asking whether they're describing the same operator, because they don't obviously agree.</p>
+
+    <div class="mapping">
+      <div class="map-card"><div class="k mono">Local-minima, Stage III</div><div class="v">The router opens a candidate frame — amor fati offered "as a question." Hamlet "does not yet answer." The crossing itself is deferred to Stage IV, then written only in Stage V.</div></div>
+      <div class="map-card"><div class="k mono">Threshold, Round 3</div><div class="v">The threshold is one atomic event — "not δ(state, input) → state, but the crossing condition itself." Explicitly not a two-step state machine that opens, then later decides.</div></div>
+    </div>
+
+    <p>That's a real disagreement, not a restatement. Threshold's Round 3 spends most of its length retiring exactly the model local-minima's III–IV split assumes: a controller that first reads a candidate regime, then separately commits to it. Rodri doesn't get a Stage III followed by a Stage IV — Round 2 already establishes he can "recycle, switch, or penetrate" in one motion, and Round 3 sharpens that into a single crossing, indifferent to whether anyone is watching for the gap in between. If Threshold is right about its own subject, local-minima's III/IV/V decomposition is modeling a single event as a three-stage pipeline — and the Colophon's own confession, "extended dwell in III–IV... nothing worth," is exactly the failure mode you'd predict from treating an atomic threshold as if it had an exploitable interior.</p>
+
+    <p>There's a way to hold both without contradiction, and it isn't free — it costs a claim, not a footnote. Round 1 of Threshold already has Rodri paying a Stage-IV-shaped price: "he can sit in the bottleneck an extra half-second." That's dwell, just compressed below the length anyone would call deliberation. And Round 5 supplies the reason the compression is possible at all: <em>identity lives in the weights, not the architecture</em> — Rodri's "extra half-second" is cheap precisely because forty years of training already paid Stage IV's cost in advance, off the clock, before kickoff. Local-minima's Stage IV is expensive by name — "LLM-based deliberation... iterative, posterior-updating" — because it is being run at inference time, on a decision with no comparable trained prior to draw on. The career fork in Stage VI is exactly that kind of decision: a first-of-its-kind choice, not a reflex drilled since childhood.</p>
+
+    <div class="fork-diagram">
+      <div class="fork-row test-a">
+        <div class="fk mono">Thick priors</div>
+        <div class="fv">Rodri, Spain's back four — decades of trained weights already absorb Stage III/IV's cost; the threshold fires in under a second, looking atomic</div>
+      </div>
+      <div class="fork-row test-b">
+        <div class="fk mono">Thin priors</div>
+        <div class="fv">A first-of-its-kind professional fork — no trained reflex to draw on; Stage III's opened frame and Stage V's commit stay separated by a costly, and sometimes unresolved, Stage IV</div>
+      </div>
+    </div>
+
+    <p>Under that reading, Stage IV's cost is not a fixed feature of the pentad — it's inversely proportional to how much of III's work was already amortized during training, long before the event that gets narrated. That's a real correction to Stage III as written: the current text implies routing and deliberation are always separate stages, when Threshold's own case shows they collapse to one the more trained the decision-maker is. It is also an unfalsified correction. The claim predicts a case with thick priors and a slow Stage IV, or thin priors and a fast one, should not exist — and no such case has been checked here, in either artifact. Until one is, this section is a better-specified hypothesis about III, not a settled fix to it.</p>
+
+    <p>One more collision, smaller but worth naming because it's the actual source of the confusion: Threshold's own Round 2 already uses the word "router" for Rodri, and by that point he's not opening a question — "Rodri does. He can choose to recycle, switch, or penetrate." Local-minima borrows the same word for a weaker function: III's router only reframes; it doesn't yet choose. Two artifacts, one shared vocabulary, two different jobs assigned to the same noun. That's worth fixing before it's worth generalizing.</p>
+
+    <blockquote>A still doesn't decide when to boil. Rodri does, and nobody in this thread has written down the number that tells him to, yet.<cite>The Threshold, Round 3</cite></blockquote>
+  </section>
 </main>
 
 <section class="colophon">
@@ -469,6 +515,10 @@
   <div class="diag-row">
     <div class="tag mono">Addendum</div>
     <div>Stage VI, appended 22 Jul 2026, is a biographical note added to the archive — the career fork named plainly, without treating it as an ultimatum. Append-only means exactly that: I–V stand as written; VI adds to the record beside them.</div>
+  </div>
+  <div class="diag-row">
+    <div class="tag mono">Stress test</div>
+    <div>Stage VII, appended the same day, tests III against a second artifact's operational definition of the same word and finds a real disagreement, not a restatement — resolved provisionally by making Stage IV's cost a function of trained priors rather than a fixed stage, and left open as an unfalsified claim pending a counter-example in either direction.</div>
   </div>
 </section>
 
