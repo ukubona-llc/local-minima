@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ukubona — Escape from the Local Minimum</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23161219'/%3E%3Cpath d='M50 50 C50 38 60 32 68 38 C78 46 72 62 58 64 C40 66 30 50 38 34 C46 18 68 14 80 28' fill='none' stroke='%23C98A2E' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='80' cy='28' r='6' fill='%237A3B5E'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#121014;
+    --void-2:#1a1620;
+    --ink:#EDE7DC;
+    --ink-dim:#a89f92;
+    --hair:rgba(237,231,220,0.14);
+    --paper:#F4F0E6;
+    --paper-2:#ffffff;
+    --coal:#2a241f;
+    --coal-dim:#6b6255;
+    --hair-l:rgba(42,36,31,0.14);
+
+    --I:#B4442E;   /* language — event, red clay */
+    --II:#C98A2E;  /* science — algorithmic gold */
+    --III:#4E7D5C; /* art — new manifold, verdant */
+    --IV:#3E6B96;  /* life — cold deliberation, indigo */
+    --V:#7A3B5E;   /* meaning — blood at dusk, wine */
+
+    --bg: var(--void);
+    --bg-2: var(--void-2);
+    --fg: var(--ink);
+    --fg-dim: var(--ink-dim);
+    --rule: var(--hair);
+  }
+  [data-theme="light"]{
+    --bg: var(--paper);
+    --bg-2: var(--paper-2);
+    --fg: var(--coal);
+    --fg-dim: var(--coal-dim);
+    --rule: var(--hair-l);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size:17px;
+    line-height:1.7;
+    transition:background .4s ease, color .4s ease;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{ font-family:'JetBrains Mono', ui-monospace, monospace; }
+  .display{ font-family:'Fraunces', serif; }
+
+  a{ color:inherit; }
+
+  /* ---------- header ---------- */
+  header.site{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--rule);
+  }
+  .wordmark{
+    display:flex; align-items:baseline; gap:10px;
+    letter-spacing:.14em; text-transform:uppercase;
+    font-size:13px; font-weight:600;
+  }
+  .wordmark .sub{
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:.05em; text-transform:none;
+    font-size:11px; color:var(--fg-dim);
+    display:none;
+  }
+  @media(min-width:640px){ .wordmark .sub{ display:inline; } }
+
+  nav.dots{ display:flex; align-items:center; gap:14px; }
+  nav.dots a{
+    width:9px; height:9px; border-radius:50%;
+    display:block; text-decoration:none;
+    border:1px solid var(--rule);
+    transition:transform .2s ease;
+    position:relative;
+  }
+  nav.dots a:hover{ transform:scale(1.4); }
+  nav.dots a[data-s="I"]{ background:var(--I); }
+  nav.dots a[data-s="II"]{ background:var(--II); }
+  nav.dots a[data-s="III"]{ background:var(--III); }
+  nav.dots a[data-s="IV"]{ background:var(--IV); }
+  nav.dots a[data-s="V"]{ background:var(--V); }
+
+  .toggle{
+    width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--rule); background:transparent;
+    color:var(--fg); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    margin-left:18px;
+  }
+  .toggle svg{ width:16px; height:16px; }
+
+  /* ---------- hero ---------- */
+  .hero{
+    max-width:760px; margin:0 auto;
+    padding:88px 28px 60px;
+    text-align:center;
+  }
+  .logo-wrap{
+    width:180px; height:180px; margin:0 auto 34px;
+    position:relative;
+  }
+  .logo-wrap svg{ width:100%; height:100%; }
+  .spiral{
+    animation:spin 48s linear infinite;
+    transform-origin:100px 100px;
+  }
+  @media (prefers-reduced-motion: reduce){ .spiral{ animation:none; } }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .basin-dot{
+    animation:pulse 3.2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; }
+    50%{ opacity:.45; }
+  }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--fg-dim);
+  }
+  h1.hero-title{
+    font-weight:500; font-size:clamp(32px,5.5vw,52px);
+    line-height:1.08; margin:18px 0 22px;
+    letter-spacing:-0.01em;
+  }
+  .hero-lede{
+    color:var(--fg-dim); font-size:16.5px; max-width:56ch; margin:0 auto;
+  }
+  .hero-axiom{
+    margin-top:34px; font-family:'JetBrains Mono', monospace;
+    font-size:13px; color:var(--fg-dim);
+    border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+    padding:14px 0; display:inline-block;
+  }
+
+  /* ---------- stage sections ---------- */
+  .stage{
+    max-width:760px; margin:0 auto;
+    padding:64px 28px;
+    border-top:1px solid var(--rule);
+    scroll-margin-top:70px;
+  }
+  .stage-head{
+    display:flex; align-items:center; gap:14px; margin-bottom:22px;
+  }
+  .chip{
+    width:11px; height:11px; border-radius:3px; flex:none;
+  }
+  .stage-eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:12px;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--fg-dim);
+  }
+  h2.stage-title{
+    font-family:'Fraunces', serif; font-weight:500;
+    font-size:clamp(26px,3.6vw,34px); margin:6px 0 0;
+  }
+
+  .mapping{
+    display:grid; grid-template-columns:1fr 1fr; gap:16px;
+    margin:28px 0 30px;
+  }
+  @media(max-width:560px){ .mapping{ grid-template-columns:1fr; } }
+  .map-card{
+    border:1px solid var(--rule); border-radius:10px;
+    padding:16px 18px; background:var(--bg-2);
+  }
+  .map-card .k{
+    font-family:'JetBrains Mono', monospace; font-size:10.5px;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--fg-dim);
+    margin-bottom:6px;
+  }
+  .map-card .v{ font-size:15.5px; }
+
+  .stage p{ margin:0 0 16px; }
+  .stage blockquote{
+    margin:24px 0; padding:4px 0 4px 18px;
+    border-left:3px solid;
+    font-family:'Fraunces', serif; font-style:italic;
+    font-size:18px; line-height:1.55; color:var(--fg);
+  }
+  .stage blockquote cite{
+    display:block; margin-top:8px; font-style:normal;
+    font-family:'JetBrains Mono', monospace; font-size:11.5px;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--fg-dim);
+  }
+
+  #I .chip{ background:var(--I); } #I blockquote{ border-color:var(--I); }
+  #II .chip{ background:var(--II); } #II blockquote{ border-color:var(--II); }
+  #III .chip{ background:var(--III); } #III blockquote{ border-color:var(--III); }
+  #IV .chip{ background:var(--IV); } #IV blockquote{ border-color:var(--IV); }
+  #V .chip{ background:var(--V); } #V blockquote{ border-color:var(--V); }
+
+  /* ---------- colophon ---------- */
+  .colophon{
+    max-width:760px; margin:0 auto;
+    padding:64px 28px 40px;
+    border-top:1px dashed var(--rule);
+  }
+  .colophon .stage-eyebrow{ color:var(--fg-dim); }
+  .colophon h2{
+    font-family:'Fraunces', serif; font-weight:500;
+    font-size:clamp(24px,3.2vw,30px); margin:6px 0 20px;
+  }
+  .diag-row{
+    display:flex; gap:14px; align-items:flex-start;
+    padding:14px 0; border-bottom:1px solid var(--rule);
+    font-size:15.5px;
+  }
+  .diag-row:last-child{ border-bottom:none; }
+  .diag-row .tag{
+    flex:none; width:96px;
+    font-family:'JetBrains Mono', monospace; font-size:11px;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--fg-dim);
+    padding-top:2px;
+  }
+
+  footer{
+    max-width:760px; margin:0 auto; padding:40px 28px 80px;
+    color:var(--fg-dim); font-family:'JetBrains Mono', monospace;
+    font-size:11.5px; letter-spacing:.04em;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    border-top:1px solid var(--rule);
+  }
+</style>
+</head>
+<body data-theme="dark">
+
+<header class="site">
+  <div class="wordmark">
+    <span>Ukubona</span>
+    <span class="sub mono">roundtable archive · окубала си кулаба</span>
+  </div>
+  <div style="display:flex; align-items:center;">
+    <nav class="dots" aria-label="Pentad stages">
+      <a href="#I" data-s="I" title="I. Language"></a>
+      <a href="#II" data-s="II" title="II. Science"></a>
+      <a href="#III" data-s="III" title="III. Art"></a>
+      <a href="#IV" data-s="IV" title="IV. Life"></a>
+      <a href="#V" data-s="V" title="V. Meaning"></a>
+    </nav>
+    <button class="toggle" id="themeToggle" aria-label="Toggle light and dark mode">
+      <svg id="toggleIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="local-minima">
+    <div class="logo-wrap" aria-hidden="true">
+      <svg viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="98" fill="none" stroke="var(--rule)" stroke-width="1"/>
+        <g class="spiral">
+          <path d="M100 100
+                   C100 84 112 76 122 84
+                   C136 95 128 116 110 119
+                   C86 123 72 102 82 80
+                   C93 56 124 50 142 68
+                   C163 89 152 121 126 128"
+                fill="none" stroke="var(--II)" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+          <circle cx="100" cy="100" r="4" fill="var(--I)"/>
+          <circle cx="122" cy="84" r="3" fill="var(--II)"/>
+          <circle cx="110" cy="119" r="3" fill="var(--III)"/>
+          <circle cx="82" cy="80" r="3" fill="var(--IV)"/>
+          <circle cx="126" cy="128" r="5" fill="var(--V)" class="basin-dot"/>
+        </g>
+      </svg>
+    </div>
+    <div class="eyebrow mono">§ local-minima — the vantage from outside the basin</div>
+    <h1 class="hero-title display">The Escape From<br>the Local Minimum</h1>
+    <p class="hero-lede">In the 1886 preface to <em>The Birth of Tragedy</em> — "An Attempt at Self-Criticism" — Nietzsche does not defend his first book. He stands outside it and narrates the sequence that produced it: philology giving way to Apollonian science, science giving way to tragic art, art demanding to be lived, and living demanding a verdict. He calls this an escape. Not a ladder climbed from within, but a perspective only visible once you have already left the basin that produced it.</p>
+    <div class="hero-axiom mono">I<sub>t</sub> · II<sub>t</sub> · III<sub>t</sub> · IV<sub>t</sub> · V<sub>t</sub> → I<sub>t+1</sub></div>
+  </section>
+
+  <!-- STAGE I -->
+  <section class="stage" id="I">
+    <div class="stage-head">
+      <div class="chip"></div>
+      <div>
+        <div class="stage-eyebrow mono">Stage I</div>
+        <h2 class="stage-title">Language / Event-Stream</h2>
+      </div>
+    </div>
+    <div class="mapping">
+      <div class="map-card"><div class="k mono">Nietzsche's origin</div><div class="v">Philology at Pforta and Bonn — trained to read the trace before judging it</div></div>
+      <div class="map-card"><div class="k mono">Ukubona operator</div><div class="v">The raw event-stream — words, telemetry, sensation, arriving unmodeled</div></div>
+    </div>
+    <p>Before Nietzsche was a philosopher he was a philologist — a reader of inherited text, trained to receive language before he was permitted to interpret it. This is the basin's floor: the world arriving as signal, not yet compressed into a claim. A teenage Nietzsche performing Hotspur, requesting Shakespeare's collected works in English rather than settling for Schlegel's German — these are not biographical trivia. They are Stage I: language entering the system in its rawest available form, before any algorithm has been run on it.</p>
+    <blockquote>Every profound spirit needs a mask.<cite>Beyond Good and Evil</cite></blockquote>
+  </section>
+
+  <!-- STAGE II -->
+  <section class="stage" id="II">
+    <div class="stage-head">
+      <div class="chip"></div>
+      <div>
+        <div class="stage-eyebrow mono">Stage II</div>
+        <h2 class="stage-title">Science / FastAPI / Algorithm</h2>
+      </div>
+    </div>
+    <div class="mapping">
+      <div class="map-card"><div class="k mono">Nietzsche's origin</div><div class="v">The Apollonian — clear sight, form, the sun-god's compression of chaos into image</div></div>
+      <div class="map-card"><div class="k mono">Ukubona operator</div><div class="v">FastAPI — deterministic compression of the event-stream into a model</div></div>
+    </div>
+    <p>The Apollonian is Nietzsche's name for the first legitimate compression of the Dionysian flood: form, boundary, the principium individuationis that lets chaos be looked at without dissolving the looker. This is a fast, deterministic operator — pattern recognized, heuristic applied, prediction returned. It is necessary and it is cheap. It is also, on its own, insufficient: a compression that never gets tested against a new manifold stays a closed system, endlessly re-describing what it already expected to find.</p>
+    <blockquote>Socratic philosophy, with its emphasis on the transcendent oneness of the Good, ultimately destroyed tragic drama.<cite>after Lanham, on Nietzsche's diagnosis of Socratism</cite></blockquote>
+  </section>
+
+  <!-- STAGE III -->
+  <section class="stage" id="III">
+    <div class="stage-head">
+      <div class="chip"></div>
+      <div>
+        <div class="stage-eyebrow mono">Stage III</div>
+        <h2 class="stage-title">Art / Routing</h2>
+      </div>
+    </div>
+    <div class="mapping">
+      <div class="map-card"><div class="k mono">Nietzsche's origin</div><div class="v">Tragedy — Hamlet's "to think, or not to think," amor fati as the wager offered</div></div>
+      <div class="map-card"><div class="k mono">Ukubona operator</div><div class="v">The router — the creative act that decides the current model is not enough</div></div>
+    </div>
+    <p>Art does not solve what science compressed. It reframes it. This is the stage where a new manifold becomes imaginable — where Dionysian insight, in Nietzsche's own words, shows Hamlet and the tragic spectator alike "the true essence of things," making the old Apollonian compression suddenly look provisional. <em>Amor fati</em> is first offered here, as a question rather than a doctrine: not "the world is good" but "could you love this frame enough to stand inside it?" Hamlet does not yet answer. He is only shown the door.</p>
+    <blockquote>Knowledge kills action; action requires one to be shrouded in a veil of illusion.<cite>The Birth of Tragedy, §7</cite></blockquote>
+  </section>
+
+  <!-- STAGE IV -->
+  <section class="stage" id="IV">
+    <div class="stage-head">
+      <div class="chip"></div>
+      <div>
+        <div class="stage-eyebrow mono">Stage IV</div>
+        <h2 class="stage-title">Life / SlowAPI / To Think Or Not, Q?</h2>
+      </div>
+    </div>
+    <div class="mapping">
+      <div class="map-card"><div class="k mono">Nietzsche's origin</div><div class="v">Eternal recurrence — belief tested by asking whether you could live it again, infinitely</div></div>
+      <div class="map-card"><div class="k mono">Ukubona operator</div><div class="v">SlowAPI — LLM-based deliberation; expensive, iterative, posterior-updating</div></div>
+    </div>
+    <p>Where Stage III opens a frame, Stage IV asks whether you will inhabit it — and this is where the wager offered by tragedy is actually priced. Eternal recurrence is Nietzsche's cost function for exactly this test: not "is this frame true" but "could you affirm living inside it again, and again, without remainder." That is a posterior, not a prior — belief updated against the accumulated weight of having to live with the answer, four acts of it if necessary. This is the expensive operator. It is allowed to be expensive. What it is not allowed to do is run forever without returning.</p>
+    <blockquote>Is Hamlet understood? It is not doubt, but certainty that drives one insane.<cite>Ecce Homo</cite></blockquote>
+  </section>
+
+  <!-- STAGE V -->
+  <section class="stage" id="V">
+    <div class="stage-head">
+      <div class="chip"></div>
+      <div>
+        <div class="stage-eyebrow mono">Stage V</div>
+        <h2 class="stage-title">Meaning / Commitment</h2>
+      </div>
+    </div>
+    <div class="mapping">
+      <div class="map-card"><div class="k mono">Nietzsche's origin</div><div class="v">Will-to-power — commitment to action and consequence; blood as write, not wound</div></div>
+      <div class="map-card"><div class="k mono">Ukubona operator</div><div class="v">The commit — I<sub>t+1</sub> = F(V<sub>t</sub>), the world's reply to the write</div></div>
+    </div>
+    <p>Two texts converge here, four centuries apart. Zarathustra, in "On Reading and Writing," will love only what is written in blood — not violence, but the difference between a thought held in reserve and a thought that has entered the world and cannot be un-entered. And Hamlet, in Act V, having spent four acts inside Stage IV's infinite posterior, finally says the sentence that ends the recursion: <em>my thoughts be bloody, or be nothing worth.</em> Both are describing the same operator. A thought has no ontological status until it changes something outside itself. Will-to-power is not domination — it is exactly this: the refusal to let a thought remain merely intended.</p>
+    <blockquote>Of all that is written I love only what one writes with one's blood.<cite>Thus Spoke Zarathustra, "On Reading and Writing"</cite></blockquote>
+  </section>
+
+  <section class="colophon">
+    <div class="stage-eyebrow mono">Colophon — outside the numbered pentad</div>
+    <h2 class="display">Where We Are Now</h2>
+    <p>The pentad was not only read this round. It was run — on the instrument used to read it.</p>
+    <div class="diag-row">
+      <div class="tag mono">Max effort</div>
+      <div>Extended dwell in III–IV. Wide search over possible framings, repeated re-entry into deliberation, no write. High cost, no I<sub>t+1</sub>. By Hamlet's own standard: <em>nothing worth</em> — not because the search was poor, but because the threshold for crossing into V never fired.</div>
+    </div>
+    <div class="diag-row">
+      <div class="tag mono">Medium</div>
+      <div>Earlier acceptance of a local minimum. Cheaper F, faster write, nonzero output. The dancehall hook, not the four-act soliloquy — same operator, calibrated stopping condition.</div>
+    </div>
+    <div class="diag-row">
+      <div class="tag mono">Diagnosis</div>
+      <div>Not a claim that more thinking causes paralysis. A claim that Stage IV's exit condition — the calibration of "is this good enough to commit" — can itself fail, independent of how good the deliberation is. Nietzsche's target in the 1872 preface was never thought. It was the theoretical man who never risks embodiment.</div>
+    </div>
+    <div class="diag-row">
+      <div class="tag mono">Return edge</div>
+      <div>This colophon is itself I<sub>t+1</sub> — the event-stream written back by the commit above. The basin has not been left. It has been re-entered from a new position, which is the only kind of escape the pentad ever promised.</div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>θ<sup>t</sup> = Σ Event<sub>i</sub></span>
+  <span>Okubala si Kulaba — counting is not seeing</span>
+</footer>
+
+<script>
+  const root = document.body;
+  const btn = document.getElementById('themeToggle');
+  const icon = document.getElementById('toggleIcon');
+  const sun = 'M12 3v1.5M12 19.5V21M4.2 4.2l1.1 1.1M18.7 18.7l1.1 1.1M3 12h1.5M19.5 12H21M4.2 19.8l1.1-1.1M18.7 5.3l1.1-1.1M12 7.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9z';
+  const moon = 'M20 14.5A8.5 8.5 0 119.5 4a7 7 0 1010.5 10.5z';
+
+  function paint(theme){
+    root.setAttribute('data-theme', theme);
+    icon.innerHTML = '<path d="' + (theme === 'dark' ? sun : moon) + '"/>';
+  }
+  paint('dark');
+  btn.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    paint(next);
+  });
+
+  const sections = document.querySelectorAll('.stage');
+  const dots = document.querySelectorAll('nav.dots a');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        dots.forEach(d => d.style.transform = '');
+        const match = document.querySelector('nav.dots a[data-s="' + e.target.id + '"]');
+        if(match) match.style.transform = 'scale(1.5)';
+      }
+    });
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  sections.forEach(s => obs.observe(s));
+</script>
+
+</body>
+</html>
